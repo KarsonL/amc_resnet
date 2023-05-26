@@ -279,37 +279,27 @@ if __name__ == "__main__":
         print('=======> total search time: ', time.time()- start_time)
     
         
+        # pruning, and export a pruned model
+        best_p = env.best_strategy
+        ratios = ''
+        for i in best_p:
+            ratios += (str(i)+',')
         
-        # best_p = env.best_strategy
-        # ratios = ''
-        # for i in best_p:
-        #     ratios += (str(i)+',')
+        args.ratios = ratios
+        print(args.ratios)
+        args.job = 'export'
         
-        # args.ratios = ratios
-        # print(args.ratios)
-        # args.job = 'export'
-        
-        # model, checkpoint = get_model_and_checkpoint(args.model, args.dataset, checkpoint_path=args.ckpt_path,
-        #                                           n_gpu=args.n_gpu)
+        model, checkpoint = get_model_and_checkpoint(args.model, args.dataset, checkpoint_path=args.ckpt_path,
+                                                  n_gpu=args.n_gpu)
 
-        # env = ChannelPruningEnv(model, checkpoint, args.dataset,
-        #                     preserve_ratio=1. if args.job == 'export' else args.preserve_ratio,
-        #                     n_data_worker=args.n_worker, batch_size=args.data_bsize,
-        #                     args=args, export_model=args.job == 'export', use_new_input=args.use_new_input)
-        # export_model(env, args)        
+        env = ChannelPruningEnv(model, checkpoint, args.dataset,
+                            preserve_ratio=1. if args.job == 'export' else args.preserve_ratio,
+                            n_data_worker=args.n_worker, batch_size=args.data_bsize,
+                            args=args, export_model=args.job == 'export', use_new_input=args.use_new_input)
+        export_model(env, args)        
         
     elif args.job == 'export':
-        # args.ratios = '1.0, 1.0, 0.875, 0.8125, 0.8125, 0.78125, 0.78125, 0.71875, 0.703125, 0.640625, 0.59375, 0.53125, 0.765625, 0.390625, 0.453125'	
-        # args.ratios = '1.0, 1.0, 0.875, 0.8125, 0.8125, 0.78125, 0.78125, 0.703125, 0.671875, 0.640625, 0.609375, 0.578125, 0.546875, 0.484375, 0.5546875'
-        # args.ratios = '1.0, 1.0, 0.875, 0.8125, 0.75, 0.75, 0.75, 0.71875, 0.671875, 0.640625, 0.609375, 0.578125, 0.8125, 0.671875, 0.203125'
-        # args.ratios = '1.0, 1.0, 0.875, 0.75, 0.75, 0.75, 0.71875, 0.703125, 0.71875, 0.703125, 0.6875, 0.65625, 0.65625, 0.4296875, 0.203125'
-        # args.ratios =  '1.0, 1.0, 1.0, 1.0, 0.5, 0.71875, 0.84375, 0.8125, 0.671875, 0.78125, 0.734375, 0.609375, 0.390625, 0.203125, 0.203125'
-        # args.ratios = '1.0, 1.0, 0.875, 0.875, 0.8125, 0.78125, 0.78125, 0.703125, 0.75, 0.671875, 0.625, 0.59375, 0.5, 0.421875, 0.203125'
-        # args.ratios = '1.0, 1.0, 0.857, 0.71, 0.69, 0.64, 0.64, 0.69, 0.67, 0.63, 0.575, 0.53, 0.53, 0.44, 0.81'
-        # args.ratios = '1.0, 0.75, 0.625, 0.5625, 0.5, 0.53125, 0.5, 0.5, 0.5, 0.515625, 0.53125, 0.484375, 0.203125, 0.203125, 0.203125'
-        # args.ratios  = '1.0, 0.25, 0.375, 0.375, 0.3125, 0.34375, 0.4375, 0.40625, 0.4375, 0.4375, 0.46875, 0.484375, 0.28125, 0.1015625, 0.1015625'
-        #args.ratios = '1.0, 1.0, 0.875, 0.8125, 0.75, 0.71875, 0.71875, 0.703125, 0.703125, 0.6875, 0.671875, 0.640625, 0.609375, 0.5703125, 0.3046875'
-        # args.ratios = '1.0, 1.0, 0.875, 0.75, 0.75, 0.71875, 0.71875, 0.703125, 0.703125, 0.6875, 0.703125, 0.6875, 0.703125, 0.46875, 0.203125'
+    
         args.ratios = '1.0, 0.75, 0.5, 0.5625, 0.5, 0.46875, 0.4375, 0.4375, 0.4375, 0.375, 0.390625, 0.40625, 0.359375, 0.1484375, 0.1015625'
         export_model(env, args)
     else:
